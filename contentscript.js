@@ -108,8 +108,8 @@ function addBox(rect, word) {
                 <div id="ffwiki-type">
                 </div> 
             </span>
-            <p id="ffwiki-desc">
-            </p>
+            <div id="ffwiki-desc">
+            </div>
         </div>`;
     document.body.appendChild(box);
     alignBox(rect);
