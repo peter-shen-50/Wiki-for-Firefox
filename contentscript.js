@@ -36,10 +36,12 @@ function addBox(rect, word) {
     var horiz = calcHorizontal(rect);
     var box = document.createElement("div");
     box.id = "ffwiki";
+    box.class = "specificityplus"
+    box.tagName = "specificityplus"
     box.innerHTML +=  
         `<style>
             .ffwiki-box {
-                all: unset;
+                all: initial;
                 border: 1px solid;
                 border-radius: 5px;
                 border-color: rgba(167,215,249,1);
@@ -51,8 +53,8 @@ function addBox(rect, word) {
                 position: absolute; 
                 width: 300px; 
                 z-index: 9999999998; 
-                font-family: arial; 
                 font-size: 12px;
+                font-family: sans-serif;
                 font-color: black; 
                 left: ` + rect.x + `px;
                 top: ` + rect.y + `px;
@@ -80,7 +82,6 @@ function addBox(rect, word) {
                 margin-left: -16px;
             }
             #ffwiki-url {
-                all: unset; 
                 text-decoration: none; 
                 display: inline-block; 
                 float: left; 
@@ -88,11 +89,9 @@ function addBox(rect, word) {
                 color: #0645ad;
             }
             #ffwiki-desc {
-                all: unset;
                 display: block; 
             }
             #ffwiki-type {
-                all: unset; 
                 font-size: 10px; 
                 display: inline-block;
                 color: #a55858; 
@@ -223,8 +222,8 @@ async function start() {
             box.addEventListener("click", () => {
                 boxClicked = true;
             });
-            window.addEventListener("click", windowClick);
-            window.addEventListener("keydown", (event) => {
+            document.addEventListener("click", windowClick);
+            document.addEventListener("keydown", (event) => {
                 if (!event.repeat && event.ctrlKey) {
                     if (calcVertical(rect) == "bottom")
                         editContents(list.shift());
@@ -240,11 +239,14 @@ async function start() {
             editContents(list.shift());
         else
             editBoxTop(list.shift());
+        if (list.length < 1) {
+            document.getElementById("ffwiki-type").style.color = "black";
+        }
     }
 }
 
-window.addEventListener("dblclick", start);
-window.addEventListener("keydown", (event) => {
+document.addEventListener("dblclick", start);
+document.addEventListener("keydown", (event) => {
     if (!event.repeat && event.shiftKey)
         start();
 })
