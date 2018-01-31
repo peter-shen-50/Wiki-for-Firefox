@@ -146,7 +146,8 @@ function alignBox(rect) {
 
 function removeBox() {
     var box = document.getElementById("ffwiki");
-    window.removeEventListener("click", windowClick);
+    document.removeEventListener("keydown", nextDefinition);
+    document.removeEventListener("click", windowClick);
     document.body.removeChild(box);
     rect = null;
 }
@@ -193,6 +194,18 @@ async function newList(word) {
     return true; 
 }
 
+function nextDefinition(event) {
+    if (!event.repeat && event.ctrlKey) {
+        if (calcVertical(rect) == "bottom")
+            editContents(list.shift());
+        else
+            editBoxTop(list.shift());
+        if (list.length < 1) {
+            document.getElementById("ffwiki-type").style.color = "black";
+        }
+    }
+}
+
 function checkForEmptyList() {
     if (list.length == 0) {
         list.push({
@@ -223,17 +236,7 @@ async function start() {
                 boxClicked = true;
             });
             document.addEventListener("click", windowClick);
-            document.addEventListener("keydown", (event) => {
-                if (!event.repeat && event.ctrlKey) {
-                    if (calcVertical(rect) == "bottom")
-                        editContents(list.shift());
-                    else
-                        editBoxTop(list.shift());
-                    if (list.length < 1) {
-                        document.getElementById("ffwiki-type").style.color = "black";
-                    }
-                }
-            })
+            document.addEventListener("keydown", nextDefinition);
         }
         if (calcVertical(rect) == "bottom")
             editContents(list.shift());
