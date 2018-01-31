@@ -200,9 +200,8 @@ function nextDefinition(event) {
             editContents(list.shift());
         else
             editBoxTop(list.shift());
-        if (list.length < 1) {
+        if (list.length < 1)
             document.getElementById("ffwiki-type").style.color = "black";
-        }
     }
 }
 
@@ -242,9 +241,8 @@ async function start() {
             editContents(list.shift());
         else
             editBoxTop(list.shift());
-        if (list.length < 1) {
+        if (list.length < 1)
             document.getElementById("ffwiki-type").style.color = "black";
-        }
     }
 }
 
