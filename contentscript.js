@@ -156,7 +156,7 @@ function windowClick() {
     boxClicked = false;
 }
 
-async function newList(word) {
+async function addWiktionary(word) {
     var wiktionary = await apiJSON("https://en.wiktionary.org/api/rest_v1/page/definition/", word + "?redirect=true");
     if (wiktionary.success) {
         for (var i = 0; i < 5; i++) {
@@ -177,6 +177,9 @@ async function newList(word) {
     } else {
         console.log("Wiktionary failure: " + wiktionary.error);
     }
+}
+
+async function addWikipedia(word) {
     var wikipedia = await apiJSON("https://en.wikipedia.org/api/rest_v1/page/summary/", word + "?redirect=true");
     if (wikipedia.success && wikipedia.result.description && !wikipedia.result.description.includes("disambiguation")) {
         var normal = {
@@ -189,6 +192,12 @@ async function newList(word) {
     } else {
         console.log("Wikipedia failure: " + wikipedia.error);
     }
+    return true; 
+}
+
+async function newList(word) {
+    await addWiktionary(word);
+    await addWikipedia(word);
     return true; 
 }
 
@@ -213,27 +222,32 @@ function checkForEmptyList() {
     }
 }
 
+function makeNewBox(selection) {
+    var box = document.getElementsByClassName("ffwiki-box")[0];
+    if (box == undefined) {
+        rect = selection.getRangeAt(0).getBoundingClientRect();
+        addBox(rect, "Getting definition");
+        box = document.getElementsByClassName("ffwiki-box")[0];
+        box.addEventListener("click", () => {
+            boxClicked = true;
+        });
+        document.addEventListener("click", windowClick);
+        document.addEventListener("keydown", nextDefinition);
+    }
+}
+
 async function start() {
     var selection = window.getSelection();
     var unsafe = selection.toString().trim().toLowerCase();
-    var word =  (new DOMParser).parseFromString(unsafe, "text/html").documentElement.textContent;
-    var box = document.getElementsByClassName("ffwiki-box")[0];
+    var word = (new DOMParser).parseFromString(unsafe, "text/html").documentElement.textContent;
     if (selection.type == "Range") {
-        if (box == undefined) {
-            rect = selection.getRangeAt(0).getBoundingClientRect();
-            addBox(rect, "Getting definition");
-            box = document.getElementsByClassName("ffwiki-box")[0];
-            box.addEventListener("click", () => {
-                boxClicked = true;
-            });
-            document.addEventListener("click", windowClick);
-            document.addEventListener("keydown", nextDefinition);
-        }
+        makeNewBox(selection);
         if (word != currentWord || box == undefined) {
             list = new Array();
             currentWord = word; 
             await newList(word);
             checkForEmptyList();
+            console.log(list);
         }
         if (calcVertical(rect) == "bottom")
             editContents(list.shift());
