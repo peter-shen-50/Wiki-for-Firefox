@@ -35,7 +35,7 @@ function addBox(rect, word) {
     var vert = calcVertical(rect);
     var horiz = calcHorizontal(rect);
     var box = document.createElement("div");
-    box.className = "ffwiki";
+    box.id = "ffwiki";
     box.innerHTML +=  
         `<style>
             .ffwiki-box {
@@ -143,10 +143,8 @@ function alignBox(rect) {
 }
 
 function removeBox() {
-    var box = document.getElementsByClassName("ffwiki");
-    for (var i = 0; i < box.length; i++) {
-        document.body.removeChild(box[i]);
-    }
+    var box = document.getElementById("ffwiki");
+    document.body.removeChild(box);
     document.removeEventListener("keydown", nextDefinition);
     document.removeEventListener("click", windowClick);
     rect = null;
@@ -221,21 +219,21 @@ async function start() {
     var word =  (new DOMParser).parseFromString(unsafe, "text/html").documentElement.textContent;
     var box = document.getElementsByClassName("ffwiki-box")[0];
     if (selection.type == "Range") {
-        if (word != currentWord || box == undefined) {
-            list = new Array();
-            currentWord = word; 
-            await newList(word);
-            checkForEmptyList();
-        }
         if (box == undefined) {
             rect = selection.getRangeAt(0).getBoundingClientRect();
-            addBox(rect, word);
+            addBox(rect, "Getting definition");
             box = document.getElementsByClassName("ffwiki-box")[0];
             box.addEventListener("click", () => {
                 boxClicked = true;
             });
             document.addEventListener("click", windowClick);
             document.addEventListener("keydown", nextDefinition);
+        }
+        if (word != currentWord || box == undefined) {
+            list = new Array();
+            currentWord = word; 
+            await newList(word);
+            checkForEmptyList();
         }
         if (calcVertical(rect) == "bottom")
             editContents(list.shift());
