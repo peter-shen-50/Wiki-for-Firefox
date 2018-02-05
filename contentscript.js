@@ -100,7 +100,7 @@ function addBox(rect, word) {
         </style>
         <div class="ffwiki-box">
             <div> 
-                <a id="ffwiki-url" href="https://www.google.com/search?q=define+` + word + `"> 
+                <a id="ffwiki-url" href=""> 
                     <b id="ffwiki-word">`
                     + word +
                     `</b> 
