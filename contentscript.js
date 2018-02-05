@@ -167,7 +167,7 @@ async function newList(word) {
                 var object = element.definitions[i];
                 var normal = {
                     "word": word,
-                    "definition": (new DOMParser).parseFromString(object.definition, "text/html").documentElement.textContent,
+                    "definition": (new DOMParser).parseFromString(object.definition, "text/html").documentElement.innerText.split("\n")[0],
                     "type": element.partOfSpeech.toLowerCase(),
                     "url": "https://www.google.com/search?q=define+" + word
                 };
