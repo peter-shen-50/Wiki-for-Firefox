@@ -39,7 +39,6 @@ function addBox(rect, word) {
     box.innerHTML +=  
         `<style>
             .ffwiki-box {
-                all: initial;
                 border: 1px solid;
                 border-radius: 5px;
                 border-color: rgba(167,215,249,1);
@@ -80,6 +79,7 @@ function addBox(rect, word) {
                 margin-left: -16px;
             }
             #ffwiki-url {
+                border-bottom: none; 
                 text-decoration: none; 
                 display: inline-block; 
                 float: left; 
