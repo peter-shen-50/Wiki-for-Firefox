@@ -35,7 +35,7 @@ function addBox(rect, word) {
     var vert = calcVertical(rect);
     var horiz = calcHorizontal(rect);
     var box = document.createElement("div");
-    box.class = "ffwiki";
+    box.className = "ffwiki";
     box.innerHTML +=  
         `<style>
             .ffwiki-box {
@@ -145,7 +145,7 @@ function alignBox(rect) {
 function removeBox() {
     var box = document.getElementsByClassName("ffwiki");
     for (var i = 0; i < box.length; i++) {
-        document.body.removeChild(box);
+        document.body.removeChild(box[i]);
     }
     document.removeEventListener("keydown", nextDefinition);
     document.removeEventListener("click", windowClick);
