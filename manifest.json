@@ -1,6 +1,6 @@
 {
     "name": "wikidictionary",
-    "version": "1",
+    "version": "2",
     "manifest_version": 2,
     "description": "Searches wiktionary and wikipedia when you double click",
     "content_scripts": [
