@@ -35,9 +35,7 @@ function addBox(rect, word) {
     var vert = calcVertical(rect);
     var horiz = calcHorizontal(rect);
     var box = document.createElement("div");
-    box.id = "ffwiki";
-    box.class = "specificityplus"
-    box.tagName = "specificityplus"
+    box.class = "ffwiki";
     box.innerHTML +=  
         `<style>
             .ffwiki-box {
@@ -145,10 +143,12 @@ function alignBox(rect) {
 }
 
 function removeBox() {
-    var box = document.getElementById("ffwiki");
+    var box = document.getElementsByClassName("ffwiki");
+    for (var i = 0; i < box.length; i++) {
+        document.body.removeChild(box);
+    }
     document.removeEventListener("keydown", nextDefinition);
     document.removeEventListener("click", windowClick);
-    document.body.removeChild(box);
     rect = null;
 }
 
@@ -161,8 +161,8 @@ function windowClick() {
 async function newList(word) {
     var wiktionary = await apiJSON("https://en.wiktionary.org/api/rest_v1/page/definition/", word + "?redirect=true");
     if (wiktionary.success) {
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < wiktionary.result.en.length; j++) {
+        for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < wiktionary.result.en.length; j++) {
                 var element = wiktionary.result.en[j]; 
                 if (i >= element.definitions.length)
                     continue;
