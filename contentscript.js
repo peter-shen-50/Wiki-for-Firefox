@@ -85,18 +85,21 @@ function addBox(rect, word) {
                 float: left; 
                 padding-right: 6px;
                 color: #0645ad;
+                font-family: sans-serif;
             }
             #ffwiki-desc {
+                font-family: sans-serif;
                 display: block; 
             }
             #ffwiki-type {
                 font-size: 10px; 
+                font-family: sans-serif;
                 display: inline-block;
                 color: #a55858; 
             }
         </style>
         <div class="ffwiki-box">
-            <span> 
+            <div> 
                 <a id="ffwiki-url" href="https://www.google.com/search?q=define+` + word + `"> 
                     <b id="ffwiki-word">`
                     + word +
@@ -104,7 +107,7 @@ function addBox(rect, word) {
                 </a> 
                 <div id="ffwiki-type">
                 </div> 
-            </span>
+            </div>
             <div id="ffwiki-desc">
             </div>
         </div>`;
@@ -247,7 +250,6 @@ async function start() {
             currentWord = word; 
             await newList(word);
             checkForEmptyList();
-            console.log(list);
         }
         if (calcVertical(rect) == "bottom")
             editContents(list.shift());
