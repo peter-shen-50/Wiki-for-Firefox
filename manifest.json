@@ -1,5 +1,5 @@
 {
-    "name": "wikidictionary",
+    "name": "Wiki for Firefox",
     "version": "2",
     "manifest_version": 2,
     "description": "Searches wiktionary and wikipedia when you double click",
