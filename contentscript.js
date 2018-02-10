@@ -17,12 +17,26 @@ function apiJSON(hostname, query) {
         .catch(error => ({ success: false, error }));
 }
 
+/**
+ * @param {DOMRect} rect 
+ *  Rectangle with x and y coordinates
+ * 
+ * @return
+ *  whether the arrow should be placed on top or bottom - note: inverted
+ */
 function calcVertical(rect) {
     if (rect.y < 300)
         return "bottom";
     return "top";
 }
 
+/**
+ * @param {DOMRect} rect 
+ *  Rectangle with x and y coordinates, and width and height
+ * 
+ * @return
+ *  whether the arrow should be placed on left, right, or middle
+ */
 function calcHorizontal(rect) {
     if (rect.x < 150)
         return 10;
@@ -31,6 +45,12 @@ function calcHorizontal(rect) {
     return 50;
 }
 
+/**
+ * @param {DOMRect} rect 
+ *  Rectangle with x and y coordinates, and width and height 
+ * @param {*} word 
+ *  The string the user wants to look up
+ */
 function addBox(rect, word) {
     var vert = calcVertical(rect);
     var horiz = calcHorizontal(rect);
@@ -38,6 +58,12 @@ function addBox(rect, word) {
     box.id = "ffwiki";
     box.innerHTML +=  
         `<style>
+            #ffwiki {
+                all: initial;
+                * {
+                  all: unset;
+                }
+            }
             .ffwiki-box {
                 border: 1px solid;
                 border-radius: 5px;
@@ -115,6 +141,11 @@ function addBox(rect, word) {
     alignBox(rect);
 }
 
+/**
+ *  edits contents of the box and realigns when it is on top
+ * @param {Object} json 
+ *  contents of box, requires word, type, definition, and url fields
+ */
 function editBoxTop(json) {
     var box = document.getElementsByClassName("ffwiki-box")[0];
     var initialBoxHeight = box.clientHeight;
@@ -125,6 +156,11 @@ function editBoxTop(json) {
     moveBox(box.style.left, y);
 }
 
+/**
+ *  edits contents of the box, works when it is on the bottom
+ * @param {Object} json 
+ *  contents of box, requires word, type, definition, and url fields
+ */
 function editContents(json) {
     document.getElementById("ffwiki-word").innerText = json.word;
     document.getElementById("ffwiki-type").innerText = json.type;
@@ -153,6 +189,9 @@ function removeBox() {
     rect = null;
 }
 
+/**
+ * checking if the window is being clicked and not the box
+ */
 function windowClick() {
     if (!boxClicked)
         removeBox();
@@ -195,13 +234,6 @@ async function addWikipedia(word) {
     } else {
         console.log("Wikipedia failure: " + wikipedia.error);
     }
-    return true; 
-}
-
-async function newList(word) {
-    await addWiktionary(word);
-    await addWikipedia(word);
-    return true; 
 }
 
 function nextDefinition(event) {
@@ -248,7 +280,7 @@ async function start() {
         if (word != currentWord || box == undefined) {
             list = new Array();
             currentWord = word; 
-            await newList(word);
+            await Promise.all([addWiktionary(word), addWikipedia(word)]);
             checkForEmptyList();
         }
         if (calcVertical(rect) == "bottom")
